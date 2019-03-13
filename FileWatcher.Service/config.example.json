@@ -1,0 +1,15 @@
+{
+  "DryRun": true,
+  "Tasks": [
+    {
+      "Path": "c:/path/to/watch",
+      "Filter": "*",
+      "IncludeSubdirectories": false,
+      "NotifyFilter": "Attributes, CreationTime, LastAccess, LastWrite, FileName, DirectoryName, Security, Size",
+      "ChangeTypes": "All, Changed, Created, Deleted, Renamed",
+      "Command": "",
+      "Throttle": 2000,
+      "Merge": true
+    }
+  ]
+}
