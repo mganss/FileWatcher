@@ -30,6 +30,8 @@ namespace FileWatcher
         {
             Config = config ?? throw new ArgumentException("config is null", nameof(config));
             DryRun = config.DryRun;
+            if (DryRun)
+                Log.Info("Only performing test run, not executing commands.");
             foreach (var task in config.Tasks)
             {
                 if (string.IsNullOrWhiteSpace(task.Command))
@@ -65,6 +67,8 @@ namespace FileWatcher
 
             foreach (var task in Config.Tasks)
             {
+                task.Path = Environment.ExpandEnvironmentVariables(task.Path);
+
                 Log.Info($"Creating watcher for path {task.Path}.");
                 Log.Info($"Filter: {task.Filter}.");
                 Log.Info($"IncludeSubdirectories: {task.IncludeSubdirectories}.");
@@ -82,7 +86,11 @@ namespace FileWatcher
                 if (task.Throttle > 0)
                     Log.Info($"Throttle: {task.Throttle}ms.");
                 if (task.Merge)
-                    Log.Info("Merge: true.");
+                    Log.Info("Merge: True.");
+                if (!task.Wait)
+                    Log.Info("Wait: False.");
+                if (task.Timeout != -1)
+                    Log.Info($"Timeout: {task.Timeout}s.");
 
                 var watcher = new FileSystemWatcher(task.Path)
                 {
@@ -216,7 +224,7 @@ namespace FileWatcher
                     {
                         using (process)
                         {
-                            if (!process.WaitForExit(task.Timeout))
+                            if (!process.WaitForExit(task.Timeout <= 0 ? -1 : task.Timeout * 1000))
                             {
                                 Log.Warn($"Process {process.Id} has not exited within {task.Timeout}s.");
                                 process.Kill();
@@ -247,11 +255,14 @@ namespace FileWatcher
                 }
             }
 
-            foreach (var process in runningProcesses)
+            if (!DryRun)
             {
-                if (!process.HasExited)
-                    Log.Warn($"Process {process.Id} is still running.");
-                process.Dispose();
+                foreach (var process in runningProcesses)
+                {
+                    if (!process.HasExited)
+                        Log.Warn($"Process {process.Id} is still running.");
+                    process.Dispose();
+                }
             }
         }
 
