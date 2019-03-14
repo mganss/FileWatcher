@@ -30,7 +30,7 @@ namespace FileWatcher.Service
                 var showHelp = false;
 
                 System.Console.OutputEncoding = Encoding.UTF8;
-                IsConsole = Debugger.IsAttached;
+                IsConsole = Debugger.IsAttached || Process.GetCurrentProcess().SessionId != 0;
 
                 try
                 {

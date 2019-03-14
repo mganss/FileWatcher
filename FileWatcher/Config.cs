@@ -124,5 +124,22 @@ namespace FileWatcher
         ///   <c>true</c> if consecutive events will be merged; otherwise, <c>false</c>. Default is false.
         /// </value>
         public bool Merge { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to wait for a started command to exit before starting a new one.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if commands will be waited on; otherwise, <c>false</c>. Default is true.
+        /// </value>
+        public bool Wait { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the time in seconds to wait for a command to exit. -1 means wait indefinitely.
+        /// If a command timeout expires, the process will be killed.
+        /// </summary>
+        /// <value>
+        /// The timeout in seconds. Default is -1 (wait indefinitely).
+        /// </value>
+        public int Timeout { get; set; } = -1;
     }
 }

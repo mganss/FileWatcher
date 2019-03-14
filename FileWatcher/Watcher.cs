@@ -44,7 +44,13 @@ namespace FileWatcher
             public WatchTask WatchTask { get; set; }
             public Task Handler { get; set; }
             public CancellationTokenSource CancellationTokenSource { get; set; }
-            public BlockingCollection<FileSystemEventArgs> Events { get; set; }
+            public BlockingCollection<WatchEvent> Events { get; set; }
+        }
+
+        class WatchEvent
+        {
+            public FileSystemEventArgs EventArgs { get; set; }
+            public DateTime Time { get; set; }
         }
 
         readonly Dictionary<FileSystemWatcher, WatchInfo> Watchers = new Dictionary<FileSystemWatcher, WatchInfo>();
@@ -86,7 +92,7 @@ namespace FileWatcher
                 };
 
                 var cancellationTokenSource = new CancellationTokenSource();
-                var events = new BlockingCollection<FileSystemEventArgs>();
+                var events = new BlockingCollection<WatchEvent>();
                 var handler = Task.Factory.StartNew(() => HandleEvents(task, events, cancellationTokenSource.Token),
                     cancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
@@ -156,53 +162,96 @@ namespace FileWatcher
         private void Watcher_Changed(object sender, FileSystemEventArgs e)
         {
             var info = Watchers[(FileSystemWatcher)sender];
-            info.Events.Add(e);
+            info.Events.Add(new WatchEvent { EventArgs = e, Time = DateTime.Now });
         }
 
-        private void HandleEvents(WatchTask task, BlockingCollection<FileSystemEventArgs> events, CancellationToken token)
+        private void HandleEvents(WatchTask task, BlockingCollection<WatchEvent> events, CancellationToken token)
         {
-            try
+            var runningProcesses = new HashSet<Process>();
+
+            while (true)
             {
-                while (true)
+                try
                 {
-                    var e = events.Take(token);
+                    var watchEvent = events.Take(token);
+                    var ev = watchEvent.EventArgs;
 
                     Log.Info("Received event.");
 
-                    if (task.Throttle > 0 && token.WaitHandle.WaitOne(task.Throttle))
+                    if (task.Throttle > 0)
                     {
-                        Log.Info("Stopping event handler.");
-                        return;
+                        var msToWait = task.Throttle - (int)(DateTime.Now - watchEvent.Time).TotalMilliseconds;
+                        if (msToWait > 0 && token.WaitHandle.WaitOne(msToWait))
+                        {
+                            Log.Info("Stopping event handler.");
+                            return;
+                        }
                     }
 
                     if (task.Merge)
                     {
                         while (events.TryTake(out var mergeEvent))
                         {
-                            var skipMsg = $"Merging {e.ChangeType} event for path {task.Path}, filter {task.Filter}: {e.Name}.";
+                            var skipMsg = $"Merging {ev.ChangeType} event for path {task.Path}, filter {task.Filter}: {ev.Name}.";
 
-                            if (e is RenamedEventArgs skippedRenameEvent)
+                            if (ev is RenamedEventArgs skippedRenameEvent)
                                 skipMsg += $" Old path was {skippedRenameEvent.OldFullPath}.";
 
                             Log.Info(skipMsg);
 
-                            e = mergeEvent;
+                            ev = mergeEvent.EventArgs;
                         }
                     }
 
-                    var msg = $"Received {e.ChangeType} event for path {task.Path}, filter {task.Filter}: {e.Name}.";
+                    var msg = $"Received {ev.ChangeType} event for path {task.Path}, filter {task.Filter}: {ev.Name}.";
 
-                    if (e is RenamedEventArgs re)
+                    if (ev is RenamedEventArgs re)
                         msg += $" Old path was {re.OldFullPath}.";
 
                     Log.Info(msg);
 
-                    StartProcess(task, e);
+                    var process = StartProcess(task, ev);
+
+                    if (!DryRun && task.Wait && !process.HasExited)
+                    {
+                        using (process)
+                        {
+                            if (!process.WaitForExit(task.Timeout))
+                            {
+                                Log.Warn($"Process {process.Id} has not exited within {task.Timeout}s.");
+                                process.Kill();
+                            }
+                            else
+                                Log.Info($"Process {process.Id} has exited with code {process.ExitCode}.");
+                        }
+                    }
+                    else
+                    {
+                        runningProcesses.Add(process);
+                        process.Exited += (s, e) =>
+                        {
+                            Log.Info($"Process {process.Id} has exited with code {process.ExitCode}.");
+                            runningProcesses.Remove(process);
+                            process.Dispose();
+                        };
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    Log.Info($"Stopping event handler for path {task.Path}, filter {task.Filter}.");
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, $"An error has occurred handling events for path {task.Path}, filter {task.Filter}.");
                 }
             }
-            catch (OperationCanceledException)
+
+            foreach (var process in runningProcesses)
             {
-                Log.Info("Stopping event handler.");
+                if (!process.HasExited)
+                    Log.Warn($"Process {process.Id} is still running.");
+                process.Dispose();
             }
         }
 
@@ -245,16 +294,19 @@ namespace FileWatcher
             if (!string.IsNullOrWhiteSpace(arguments))
                 processStartInfo.Arguments = arguments;
 
-            var process = new Process { StartInfo = processStartInfo };
+            var process = new Process { StartInfo = processStartInfo, EnableRaisingEvents = true };
 
-            process.OutputDataReceived += (s, oe) => { if (oe.Data != null) Log.Info($"> {oe.Data}"); };
-            process.ErrorDataReceived += (s, ee) => { if (ee.Data != null) Log.Error($"> {ee.Data}"); };
+            process.OutputDataReceived += (s, oe) => { if (oe.Data != null) Log.Info($"{process.Id}> {oe.Data}"); };
+            process.ErrorDataReceived += (s, ee) => { if (ee.Data != null) Log.Error($"{process.Id}> {ee.Data}"); };
+
+            Log.Info($"Starting command: {task.Command} {task.Arguments}");
 
             if (!DryRun)
             {
                 process.Start();
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
+                Log.Info($"Process ID is {process.Id}");
             }
 
             return process;
