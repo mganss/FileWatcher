@@ -2,6 +2,7 @@
   "DryRun": true,
   "Tasks": [
     {
+      "Name": "MyTask",
       "Path": "c:/path/to/watch",
       "Filter": "*",
       "IncludeSubdirectories": false,

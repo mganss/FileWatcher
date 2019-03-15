@@ -28,7 +28,7 @@ namespace FileWatcher
     public class WatchTask
     {
         /// <summary>
-        /// Gets or sets the path to watch.
+        /// Gets or sets the path to watch. Required.
         /// </summary>
         /// <value>
         /// The path to watch.
@@ -68,7 +68,7 @@ namespace FileWatcher
         public WatcherChangeTypes ChangeTypes { get; set; } = WatcherChangeTypes.All;
 
         /// <summary>
-        /// Gets or sets the path to the executable to invoke when a file system change has occurred.
+        /// Gets or sets the path to the executable to invoke when a file system change has occurred. Required.
         /// May contain environment variables, e.g. "%AppData%\cmd.exe".
         /// When invoked, gets passed several environment variables that describe the change that has occurred:
         /// <list type="bullet">
@@ -141,5 +141,13 @@ namespace FileWatcher
         /// The timeout in seconds. Default is -1 (wait indefinitely).
         /// </value>
         public int Timeout { get; set; } = -1;
+
+        /// <summary>
+        /// Gets or sets the name of the task. Used for identification in log. Required.
+        /// </summary>
+        /// <value>
+        /// The name of the task.
+        /// </value>
+        public string Name { get; set; }
     }
 }

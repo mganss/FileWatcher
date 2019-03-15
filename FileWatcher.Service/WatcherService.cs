@@ -28,21 +28,24 @@ namespace FileWatcher.Service
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, $"Error reading configuration file {configFile}");
+                    Log.Error(ex, "Error reading configuration file {config}", configFile);
                     Program.Error = true;
                     continue;
                 }
 
                 try
                 {
-                    var watcher = new Watcher(config);
+                    foreach (var task in config.Tasks)
+                    {
+                        var watcher = new Watcher(task) { DryRun = config.DryRun };
 
-                    watchers.Add(watcher);
-                    watcher.Start();
+                        watchers.Add(watcher);
+                        watcher.Start();
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, $"Error watching file system for configuration {configFile}");
+                    Log.Error(ex, "Error watching file system for configuration {config}", configFile);
                     Program.Error = true;
                 }
             }
