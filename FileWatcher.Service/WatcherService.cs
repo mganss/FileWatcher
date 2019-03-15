@@ -10,9 +10,9 @@ using NLog;
 
 namespace FileWatcher.Service
 {
-    public class FileWriterService : IHostedService, IDisposable
+    public class FileWatcherService : IHostedService, IDisposable
     {
-        static Logger Log = LogManager.GetCurrentClassLogger();
+        static Logger Log = LogManager.GetLogger("FileWatcher.Service");
         List<Watcher> watchers = new List<Watcher>();
 
         public Task StartAsync(CancellationToken cancellationToken)

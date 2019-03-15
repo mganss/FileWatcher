@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace FileWatcher.Service
 {
     class Program
     {
-        static Logger Log = LogManager.GetCurrentClassLogger();
+        static Logger Log = LogManager.GetLogger("FileWatcher.Console");
 
         public static List<string> ConfigFiles;
         public static bool DryRun;
@@ -29,8 +30,12 @@ namespace FileWatcher.Service
             {
                 var showHelp = false;
 
-                System.Console.OutputEncoding = Encoding.UTF8;
                 IsConsole = Debugger.IsAttached || Process.GetCurrentProcess().SessionId != 0;
+
+                if (IsConsole)
+                    System.Console.OutputEncoding = Encoding.UTF8;
+                else
+                    Environment.CurrentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
                 try
                 {
@@ -62,7 +67,7 @@ namespace FileWatcher.Service
 
                 var builder = new HostBuilder().ConfigureServices((hostContext, services) =>
                 {
-                    services.AddHostedService<FileWriterService>();
+                    services.AddHostedService<FileWatcherService>();
                 });
 
                 if (!IsConsole)
