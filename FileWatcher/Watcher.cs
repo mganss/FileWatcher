@@ -315,14 +315,14 @@ namespace FileWatcher
             process.OutputDataReceived += (s, oe) => { if (oe.Data != null) Log.Info("{processid}> {data}", process.Id, oe.Data); };
             process.ErrorDataReceived += (s, ee) => { if (ee.Data != null) Log.Error("{processid}> {data}", process.Id, ee.Data); };
 
-            Log.Info("Starting command: {command} {arguments}", task.Command, task.Arguments);
+            Log.Info("Starting command: {command} {arguments}.", task.Command, task.Arguments);
 
             if (!DryRun)
             {
                 process.Start();
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
-                Log.Info("Process ID is {processid}", process.Id);
+                Log.Info("Process ID is {processid}.", process.Id);
             }
 
             return process;

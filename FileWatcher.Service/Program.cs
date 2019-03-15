@@ -50,13 +50,13 @@ namespace FileWatcher.Service
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Error parsing command line arguments");
+                    Log.Error(ex, "Error parsing command line arguments.");
                     return 1;
                 }
 
                 if (!ConfigFiles.Any())
                 {
-                    Log.Error("No config files supplied");
+                    Log.Error("No config files supplied.");
                     return 1;
                 }
 
@@ -74,7 +74,7 @@ namespace FileWatcher.Service
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "An error has occurred");
+                Log.Error(ex, "An error has occurred.");
                 return 2;
             }
         }

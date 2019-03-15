@@ -28,7 +28,7 @@ namespace FileWatcher.Service
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Error reading configuration file {config}", configFile);
+                    Log.Error(ex, "Error reading configuration file {config}.", configFile);
                     Program.Error = true;
                     continue;
                 }
@@ -45,7 +45,7 @@ namespace FileWatcher.Service
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Error watching file system for configuration {config}", configFile);
+                    Log.Error(ex, "Error watching file system for configuration {config}.", configFile);
                     Program.Error = true;
                 }
             }
