@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,13 +18,14 @@ namespace FileWatcher.Service
 {
     class Program
     {
-        static Logger Log = LogManager.GetLogger("FileWatcher.Console");
+        static readonly Logger Log = LogManager.GetLogger("FileWatcher.Console");
 
         public static List<string> ConfigFiles;
         public static bool DryRun;
         public static bool IsConsole;
         public static bool Error = false;
 
+        [SupportedOSPlatform("windows")]
         static async Task<int> Main(string[] args)
         {
             try
@@ -35,7 +37,7 @@ namespace FileWatcher.Service
                 if (IsConsole)
                     System.Console.OutputEncoding = Encoding.UTF8;
                 else
-                    Environment.CurrentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                    Environment.CurrentDirectory = Path.GetDirectoryName(AppContext.BaseDirectory);
 
                 try
                 {

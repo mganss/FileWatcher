@@ -12,8 +12,8 @@ namespace FileWatcher.Service
 {
     public class FileWatcherService : IHostedService, IDisposable
     {
-        static Logger Log = LogManager.GetLogger("FileWatcher.Service");
-        List<Watcher> watchers = new List<Watcher>();
+        static readonly Logger Log = LogManager.GetLogger("FileWatcher.Service");
+        readonly List<Watcher> watchers = new List<Watcher>();
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -65,6 +65,7 @@ namespace FileWatcher.Service
         {
             foreach (var watcher in watchers)
                 watcher.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

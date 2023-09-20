@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 namespace FileWatcher.Service
 {
     // Code from https://github.com/aspnet/Hosting/blob/2a98db6a73512b8e36f55a1e6678461c34f4cc4d/samples/GenericHostSample/ServiceBaseLifetime.cs
+    [SupportedOSPlatform("windows")]
     static class ServiceBaseLifetimeHostExtensions
     {
         public static IHostBuilder UseServiceBaseLifetime(this IHostBuilder hostBuilder)
@@ -24,16 +26,17 @@ namespace FileWatcher.Service
     }
 
     // Code from https://github.com/aspnet/Hosting/blob/2a98db6a73512b8e36f55a1e6678461c34f4cc4d/samples/GenericHostSample/ServiceBaseLifetime.cs
+    [SupportedOSPlatform("windows")]
     class ServiceBaseLifetime : ServiceBase, IHostLifetime
     {
         private readonly TaskCompletionSource<object> _delayStart = new TaskCompletionSource<object>();
 
-        public ServiceBaseLifetime(IApplicationLifetime applicationLifetime)
+        public ServiceBaseLifetime(IHostApplicationLifetime applicationLifetime)
         {
             ApplicationLifetime = applicationLifetime ?? throw new ArgumentNullException(nameof(applicationLifetime));
         }
 
-        private IApplicationLifetime ApplicationLifetime { get; }
+        private IHostApplicationLifetime ApplicationLifetime { get; }
 
         public Task WaitForStartAsync(CancellationToken cancellationToken)
         {

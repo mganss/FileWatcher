@@ -16,9 +16,8 @@ namespace FileWatcher
     /// </summary>
     public class Watcher: IDisposable
     {
-        Logger Log;
+        readonly Logger Log;
         WatchTask WatchTask { get; set; }
-        bool Error { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to perform a test run.
