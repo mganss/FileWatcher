@@ -34,7 +34,7 @@ namespace FileWatcher
         /// <exception cref="System.ArgumentException"><paramref name="task"/> is null</exception>
         public Watcher(WatchTask task)
         {
-            WatchTask = task ?? throw new ArgumentException("task is null", nameof(task));
+            WatchTask = task ?? throw new ArgumentNullException(nameof(task));
 
             if (string.IsNullOrWhiteSpace(task.Name))
                 throw new ArgumentException("Name is empty", nameof(task));

@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.5.11" />
+    <PackageReference Include="NLog" Version="5.2.5" />
   </ItemGroup>
 
 </Project>
