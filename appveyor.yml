@@ -15,6 +15,7 @@ build_script:
   - dotnet --info
   - dotnet restore
   - dotnet build -c Release
+  - dotnet pack --include-symbols --include-source -c Release FileWatcher
   - dotnet pack --include-symbols --include-source -c Release FileWatcher.Service
   - dotnet publish -r win-x64 --sc=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -p:IncludeNativeLibrariesForSelfExtract=true -c Release FileWatcher.Service
   - echo {"Tasks":[]} > config.json
