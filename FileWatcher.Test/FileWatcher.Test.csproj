@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<SonarQubeExclude>true</SonarQubeExclude>
+		<IsTestProject>true</IsTestProject>
+		<CoverletOutputFormat>opencover</CoverletOutputFormat>
+		<CoverletOutput>../coverage.xml</CoverletOutput>
+		<Include>[FileWatcher]*</Include>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="C:\Users\Michael\.nuget\packages\nlog.schema\5.2.5\contentFiles\any\any\NLog.xsd" Link="NLog.xsd">
+			<Private>False</Private>
+			<NuGetPackageVersion>5.2.5</NuGetPackageVersion>
+			<NuGetItemType>None</NuGetItemType>
+			<NuGetPackageId>NLog.Schema</NuGetPackageId>
+			<Pack>false</Pack>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Glob.cs" Version="5.1.1253" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+		<PackageReference Include="NUnit" Version="3.13.3" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+		<PackageReference Include="NUnit.Analyzers" Version="3.8.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.msbuild" Version="6.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\FileWatcher.TestCommand\FileWatcher.TestCommand.csproj" />
+		<ProjectReference Include="..\FileWatcher\FileWatcher.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="NLog.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+</Project>

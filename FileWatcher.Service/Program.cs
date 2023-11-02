@@ -24,6 +24,7 @@ namespace FileWatcher.Service
         public static bool DryRun;
         public static bool IsConsole;
         public static bool Error = false;
+        public static bool AutoReload = true;
 
         [SupportedOSPlatform("windows")]
         static async Task<int> Main(string[] args)
@@ -45,6 +46,7 @@ namespace FileWatcher.Service
                         { "c|console", "Run as a console application", v => IsConsole = v != null },
                         { "h|help", "Show this message and exit", v => showHelp = v != null },
                         { "d|dryrun", "Do not execute commands, only perform a test run", v => DryRun = v != null },
+                        { "r|reload", "Reload when configuration file changes (default is true)", v => AutoReload = v != null },
                     };
 
                     ConfigFiles = options.Parse(args);
@@ -88,7 +90,7 @@ namespace FileWatcher.Service
 
         static void ShowHelp(OptionSet p)
         {
-            System.Console.WriteLine("Usage: FileWatcher [OPTION]... CONFIGFILE...");
+            System.Console.WriteLine("Usage: FileWatcher.Service [OPTION]... CONFIGFILE...");
             System.Console.WriteLine("Watch file system changes.");
             System.Console.WriteLine();
             System.Console.WriteLine("Options:");

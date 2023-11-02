@@ -29,7 +29,7 @@ namespace FileWatcher.Service
     [SupportedOSPlatform("windows")]
     class ServiceBaseLifetime : ServiceBase, IHostLifetime
     {
-        private readonly TaskCompletionSource<object> _delayStart = new TaskCompletionSource<object>();
+        private readonly TaskCompletionSource<object> _delayStart = new();
 
         public ServiceBaseLifetime(IHostApplicationLifetime applicationLifetime)
         {

@@ -1,5 +1,6 @@
 {
   "DryRun": true,
+  "AutoReload": true,
   "Tasks": [
     {
       "Name": "MyTask",
