@@ -1,8 +1,8 @@
 FileWatcher
 ===========
 
-[![NuGet version](https://badge.fury.io/nu/FileWatcher.svg)](http://badge.fury.io/nu/FileWatcher)
-[![Build status](https://ci.appveyor.com/api/projects/status/pn3y41ltb8tcq4kk?svg=true)](https://ci.appveyor.com/project/mganss/FileWatcher/branch/master)
+[![NuGet version](https://badge.fury.io/nu/FileWatcher.Library.svg)](http://badge.fury.io/nu/FileWatcher.Library)
+[![Build status](https://ci.appveyor.com/api/projects/status/d5fn8bjw73ueoua0?svg=true)](https://ci.appveyor.com/project/mganss/FileWatcher/branch/master)
 [![codecov.io](https://codecov.io/github/mganss/FileWatcher/coverage.svg?branch=master)](https://codecov.io/github/mganss/FileWatcher?branch=master)
 
 A Windows service, console application, and library that allows execution of commands in response to file system changes.
