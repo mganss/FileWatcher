@@ -147,12 +147,15 @@ namespace FileWatcher.Service
 
         public virtual void Dispose(bool disposing)
         {
-            foreach (var (configFile, info) in watchers)
+            if (disposing)
             {
-                info.FileSystemWatcher?.Dispose();
+                foreach (var (configFile, info) in watchers)
+                {
+                    info.FileSystemWatcher?.Dispose();
 
-                foreach (var watcher in info.Watchers)
-                    watcher.Dispose();
+                    foreach (var watcher in info.Watchers)
+                        watcher.Dispose();
+                }
             }
         }
 
