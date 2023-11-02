@@ -145,7 +145,7 @@ namespace FileWatcher.Service
             return Task.CompletedTask;
         }
 
-        public virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {

@@ -361,7 +361,7 @@ public class Watcher: IDisposable
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
     /// </summary>
     /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-    public virtual void Dispose(bool disposing)
+    protected virtual void Dispose(bool disposing)
     {
         if (disposing)
         {
