@@ -16,15 +16,17 @@ using System.Threading.Tasks;
 
 namespace FileWatcher.Service
 {
-    class Program
+    static class Program
     {
         static readonly Logger Log = LogManager.GetLogger("FileWatcher.Console");
 
-        public static List<string> ConfigFiles;
-        public static bool DryRun;
-        public static bool IsConsole;
-        public static bool Error = false;
-        public static bool AutoReload = true;
+        public static List<string> ConfigFiles { get; private set; }
+        public static bool DryRun { get; private set; }
+        public static bool IsConsole { get; private set; }
+        public static bool Error { get; private set; } = false;
+        public static bool AutoReload { get; private set; } = true;
+
+        public static void SetError() => Error = true;
 
         [SupportedOSPlatform("windows")]
         static async Task<int> Main(string[] args)

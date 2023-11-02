@@ -35,7 +35,7 @@ namespace FileWatcher.Service
             catch (Exception ex)
             {
                 Log.Error(ex, "Error reading configuration file {config}.", configFile);
-                Program.Error = true;
+                Program.SetError();
             }
 
             config.DryRun = config.DryRun || Program.DryRun;
@@ -61,7 +61,7 @@ namespace FileWatcher.Service
             catch (Exception ex)
             {
                 Log.Error(ex, "Error watching file system for configuration {config}.", info.FileName);
-                Program.Error = true;
+                Program.SetError();
             }
         }
 
@@ -96,7 +96,7 @@ namespace FileWatcher.Service
                     catch (Exception ex)
                     {
                         Log.Error(ex, "Error initializing auto reload for configuration {config}.", configFile);
-                        Program.Error = true;
+                        Program.SetError();
                     }
                 }
             }
@@ -145,7 +145,7 @@ namespace FileWatcher.Service
             return Task.CompletedTask;
         }
 
-        public void Dispose()
+        public virtual void Dispose(bool disposing)
         {
             foreach (var (configFile, info) in watchers)
             {
@@ -154,7 +154,11 @@ namespace FileWatcher.Service
                 foreach (var watcher in info.Watchers)
                     watcher.Dispose();
             }
+        }
 
+        public void Dispose()
+        {
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
     }

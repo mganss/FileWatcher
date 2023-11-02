@@ -189,7 +189,7 @@ public class Watcher: IDisposable
     private void Watcher_Changed(object sender, FileSystemEventArgs e)
     {
         var info = Watchers[(FileSystemWatcher)sender];
-        info.Events.Add(new WatchEvent { EventArgs = e, Time = DateTime.Now });
+        info.Events.Add(new WatchEvent { EventArgs = e, Time = DateTime.UtcNow });
     }
 
     private void HandleEvents(WatchTask task, BlockingCollection<WatchEvent> events, CancellationToken token)
@@ -207,7 +207,7 @@ public class Watcher: IDisposable
 
                 if (task.Throttle > 0)
                 {
-                    var msToWait = task.Throttle - (int)(DateTime.Now - watchEvent.Time).TotalMilliseconds;
+                    var msToWait = task.Throttle - (int)(DateTime.UtcNow - watchEvent.Time).TotalMilliseconds;
                     if (msToWait > 0 && token.WaitHandle.WaitOne(msToWait))
                     {
                         Log.Info("Stopping event handler.");
