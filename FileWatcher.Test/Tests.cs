@@ -331,8 +331,7 @@ public class Tests
             Path = TestDirectory,
             Filter = "*.txt",
             IncludeSubdirectories = true,
-            ChangeTypes = WatcherChangeTypes.Created,
-            WorkingDirectory = AppContext.BaseDirectory
+            ChangeTypes = WatcherChangeTypes.Created
         };
 
         var fn = "test.txt";
