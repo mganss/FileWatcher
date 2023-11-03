@@ -257,12 +257,18 @@ public class Tests
 
         watcher.ProcessExited += (s, e) =>
         {
+            Assert.That(e.Task, Is.EqualTo(task));
             hasExited = true;
             countdown.Signal();
         };
 
         watcher.ProcessStarted += (s, e) =>
         {
+            Assert.That(e.Process, Is.Not.Null);
+            if (started == 0)
+                Assert.That(e.Event.ChangeType, Is.EqualTo(WatcherChangeTypes.Created));
+            if (started == 1)
+                Assert.That(e.Event.ChangeType, Is.EqualTo(WatcherChangeTypes.Deleted));
             if (started == 1 && !hasExited) waited = false;
             started++;
         };
@@ -393,5 +399,25 @@ public class Tests
         Assert.That(started, Is.False);
 
         watcher.Stop();
+    }
+
+    [Test]
+    public void TestArgs()
+    {
+        Assert.Throws(typeof(ArgumentException), () => new Watcher(new WatchTask
+        {
+            Name = null
+        }));
+        Assert.Throws(typeof(ArgumentException), () => new Watcher(new WatchTask
+        {
+            Name = "Test",
+            Command = null
+        }));
+        Assert.Throws(typeof(ArgumentException), () => new Watcher(new WatchTask
+        {
+            Name = "Test",
+            Command = "xyz",
+            Path = null
+        }));
     }
 }
