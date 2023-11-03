@@ -331,7 +331,8 @@ public class Tests
             Path = TestDirectory,
             Filter = "*.txt",
             IncludeSubdirectories = true,
-            ChangeTypes = WatcherChangeTypes.Created
+            ChangeTypes = WatcherChangeTypes.Created,
+            WorkingDirectory = AppContext.BaseDirectory
         };
 
         var fn = "test.txt";
@@ -404,6 +405,7 @@ public class Tests
     [Test]
     public void TestArgs()
     {
+        Assert.Throws(typeof(ArgumentException), () => new Watcher(null));
         Assert.Throws(typeof(ArgumentException), () => new Watcher(new WatchTask
         {
             Name = null
@@ -419,5 +421,37 @@ public class Tests
             Command = "xyz",
             Path = null
         }));
+    }
+
+    [Test]
+    public void TestStop()
+    {
+        var task = new WatchTask
+        {
+            Command = TestCommand,
+            Name = nameof(TestStop),
+            Path = TestDirectory,
+            Throttle = 1000
+        };
+
+        var fn = "test.txt";
+        var watcher = new Watcher(task) { DryRun = true };
+
+        watcher.Start();
+
+        var path = Path.Combine(TestDirectory, fn);
+        File.WriteAllText(path, "");
+        File.Delete(path);
+
+        Task.Factory.StartNew(() =>
+        {
+            Task.Delay(500);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            watcher.Stop();
+            stopwatch.Stop();
+            Assert.That(stopwatch.ElapsedMilliseconds, Is.LessThan(1000));
+        });
+
+        Task.Delay(5000);
     }
 }
