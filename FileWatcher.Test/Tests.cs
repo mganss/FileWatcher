@@ -405,7 +405,7 @@ public class Tests
     [Test]
     public void TestArgs()
     {
-        Assert.Throws(typeof(ArgumentException), () => new Watcher(null));
+        Assert.Throws(typeof(ArgumentNullException), () => new Watcher(null));
         Assert.Throws(typeof(ArgumentException), () => new Watcher(new WatchTask
         {
             Name = null
