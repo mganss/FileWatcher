@@ -22,6 +22,8 @@ public class Tests
 
         foreach (var f in Glob.ExpandNames(Path.Combine(AppContext.BaseDirectory, "test.*.json")))
             File.Delete(f);
+
+        Task.Delay(1000).Wait();
     }
 
     private static List<CommandInfo> RunTask(WatchTask task, Action action, int numProcesses = 1)
@@ -331,7 +333,8 @@ public class Tests
             Path = TestDirectory,
             Filter = "*.txt",
             IncludeSubdirectories = true,
-            ChangeTypes = WatcherChangeTypes.Created
+            ChangeTypes = WatcherChangeTypes.Created,
+            WorkingDirectory = AppContext.BaseDirectory,
         };
 
         var fn = "test.txt";
@@ -444,13 +447,13 @@ public class Tests
 
         Task.Factory.StartNew(() =>
         {
-            Task.Delay(500);
+            Task.Delay(500).Wait();
             Stopwatch stopwatch = Stopwatch.StartNew();
             watcher.Stop();
             stopwatch.Stop();
             Assert.That(stopwatch.ElapsedMilliseconds, Is.LessThan(1000));
         });
 
-        Task.Delay(5000);
+        Task.Delay(5000).Wait();
     }
 }
