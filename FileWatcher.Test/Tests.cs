@@ -165,6 +165,45 @@ public class Tests
     }
 
     [Test]
+    public void TestRename()
+    {
+        var task = new WatchTask
+        {
+            Command = TestCommand,
+            Name = nameof(TestRename),
+            Path = TestDirectory,
+            Throttle = 1000,
+            Merge = true,
+        };
+
+        var fn = "test.txt";
+        var fn2 = "test2.txt";
+        var info = RunTask(task, () =>
+        {
+            var path = Path.Combine(TestDirectory, fn);
+            File.WriteAllText(path, "");
+            var path2 = Path.Combine(TestDirectory, fn2);
+            File.Move(path, path2);
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(info, Is.Not.Null);
+            Assert.That(info, Has.Count.EqualTo(1));
+            var i0 = info[0];
+            Assert.That(Path.GetDirectoryName(AppContext.BaseDirectory), Is.EqualTo(i0.WorkingDirectory));
+            Assert.That(new Dictionary<string, string>
+            {
+                ["FileWatcher_ChangeType"] = "Renamed",
+                ["FileWatcher_FullPath"] = Path.Combine(TestDirectory, fn2),
+                ["FileWatcher_OldPath"] = Path.Combine(TestDirectory, fn),
+                ["FileWatcher_Name"] = fn2,
+                ["FileWatcher_OldName"] = fn,
+            }, Is.EqualTo(i0.Environment));
+        });
+    }
+
+    [Test]
     public void TestTimeout()
     {
         var task = new WatchTask
@@ -455,5 +494,27 @@ public class Tests
         });
 
         Task.Delay(5000).Wait();
+    }
+
+    [Test]
+    public void TestRunning()
+    {
+        var task = new WatchTask
+        {
+            Command = TestCommand,
+            Name = nameof(TestRunning),
+            Arguments = "delay 10",
+            Path = TestDirectory,
+        };
+
+        var fn = "test.txt";
+        using var watcher = new Watcher(task);
+
+        watcher.Start();
+
+        var path = Path.Combine(TestDirectory, fn);
+        File.WriteAllText(path, "");
+
+        watcher.Stop();
     }
 }

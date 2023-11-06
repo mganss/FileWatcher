@@ -18,3 +18,6 @@ var info = new CommandInfo
 var json = JsonSerializer.Serialize(info, new JsonSerializerOptions { WriteIndented = true });
 
 File.WriteAllText(Path.Combine(AppContext.BaseDirectory, $"test.{DateTime.UtcNow.Ticks}.json"), json);
+
+Console.Out.WriteLine("Out");
+Console.Error.WriteLine("Error");
