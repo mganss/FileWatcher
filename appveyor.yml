@@ -19,7 +19,7 @@ build_script:
   - dotnet pack --include-symbols --include-source -c Release FileWatcher.Service
   - dotnet publish -r win-x64 --sc=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -p:IncludeNativeLibrariesForSelfExtract=true -c Release FileWatcher.Service
   - echo {"Tasks":[]} > config.json
-  - 7z a -mx=9 FileWatcher.%APPVEYOR_BUILD_VERSION%.win-x64.exe.zip ".\FileWatcher.Service\bin\Release\net6.0\win-x64\publish\FileWatcher.Service.exe" config.json
+  - 7z a -mx=9 FileWatcher.%APPVEYOR_BUILD_VERSION%.win-x64.exe.zip ".\FileWatcher.Service\bin\Release\net8.0\win-x64\publish\FileWatcher.Service.exe" config.json
 test_script:
   - ps: |
       if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER) {
