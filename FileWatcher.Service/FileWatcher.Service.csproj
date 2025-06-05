@@ -34,8 +34,8 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5" />
 		<PackageReference Include="Mono.Options" Version="6.12.0.148" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="NLog" Version="5.4.0" />
-		<PackageReference Include="NLog.Schema" Version="5.4.0" />
+		<PackageReference Include="NLog" Version="5.5.0" />
+		<PackageReference Include="NLog.Schema" Version="5.5.0" />
 		<PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.5" />
 	</ItemGroup>
 
