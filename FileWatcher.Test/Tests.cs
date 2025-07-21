@@ -65,8 +65,7 @@ public class Tests
             var path = Path.Combine(TestDirectory, fn);
             File.WriteAllText(path, "");
         });
-
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(info, Is.Not.Null);
             Assert.That(info, Has.Count.EqualTo(1));
@@ -78,7 +77,7 @@ public class Tests
                 ["FileWatcher_FullPath"] = Path.Combine(TestDirectory, fn),
                 ["FileWatcher_Name"] = fn,
             }, Is.EqualTo(i0.Environment));
-        });
+        }
     }
 
     [Test]
@@ -103,8 +102,7 @@ public class Tests
             File.WriteAllText(Path.Combine(TestDirectory, "xyz.txt"), "");
             File.WriteAllText(path, "changed");
         });
-
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(info, Is.Not.Null);
             Assert.That(info, Has.Count.EqualTo(1));
@@ -120,7 +118,7 @@ public class Tests
                 ["FileWatcher_FullPath"] = fp,
                 ["FileWatcher_Name"] = fn,
             }, Is.EqualTo(i.Environment));
-        });
+        }
     }
 
     [Test]
@@ -144,8 +142,7 @@ public class Tests
             File.WriteAllText(path, "");
             File.Delete(path);
         });
-
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(info, Is.Not.Null);
             Assert.That(info, Has.Count.EqualTo(1));
@@ -161,7 +158,7 @@ public class Tests
                 ["FileWatcher_FullPath"] = fp,
                 ["FileWatcher_Name"] = fn,
             }, Is.EqualTo(i.Environment));
-        });
+        }
     }
 
     [Test]
@@ -185,8 +182,7 @@ public class Tests
             var path2 = Path.Combine(TestDirectory, fn2);
             File.Move(path, path2);
         });
-
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(info, Is.Not.Null);
             Assert.That(info, Has.Count.EqualTo(1));
@@ -200,7 +196,7 @@ public class Tests
                 ["FileWatcher_Name"] = fn2,
                 ["FileWatcher_OldName"] = fn,
             }, Is.EqualTo(i0.Environment));
-        });
+        }
     }
 
     [Test]
@@ -346,8 +342,7 @@ public class Tests
             Directory.CreateDirectory(Path.Combine(TestDirectory, "sub"));
             File.WriteAllText(Path.Combine(TestDirectory, "sub", "test.txt"), "");
         });
-
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(info, Is.Not.Null);
             Assert.That(info, Has.Count.EqualTo(1));
@@ -359,7 +354,7 @@ public class Tests
                 ["FileWatcher_FullPath"] = Path.Combine(TestDirectory, fn),
                 ["FileWatcher_Name"] = fn,
             }, Is.EqualTo(i0.Environment));
-        });
+        }
     }
 
     [Test]
@@ -384,8 +379,7 @@ public class Tests
             Directory.CreateDirectory(Path.Combine(TestDirectory, "sub"));
             File.WriteAllText(Path.Combine(TestDirectory, "sub", fn), "");
         }, 2);
-
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(info, Is.Not.Null);
             Assert.That(info, Has.Count.EqualTo(2));
@@ -407,7 +401,7 @@ public class Tests
                 ["FileWatcher_FullPath"] = Path.Combine(TestDirectory, "sub", fn),
                 ["FileWatcher_Name"] = Path.Combine("sub", fn),
             }, Is.EqualTo(i1.Environment));
-        });
+        }
     }
 
     [Test]

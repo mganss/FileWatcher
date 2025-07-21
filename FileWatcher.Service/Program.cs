@@ -65,7 +65,7 @@ namespace FileWatcher.Service
                     return 1;
                 }
 
-                if (!ConfigFiles.Any())
+                if (ConfigFiles.Count == 0)
                 {
                     Log.Error("No config files supplied.");
                     return 1;
