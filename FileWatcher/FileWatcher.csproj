@@ -29,7 +29,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NLog" Version="6.0.3" />
+		<PackageReference Include="NLog" Version="6.0.4" />
 	</ItemGroup>
 
 </Project>
