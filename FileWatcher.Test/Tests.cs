@@ -70,7 +70,7 @@ public class Tests
             Assert.That(info, Is.Not.Null);
             Assert.That(info, Has.Count.EqualTo(1));
             var i0 = info[0];
-            Assert.That(Path.GetDirectoryName(AppContext.BaseDirectory), Is.EqualTo(i0.WorkingDirectory));
+            Assert.That(AppContext.BaseDirectory, Is.EqualTo(i0.WorkingDirectory));
             Assert.That(new Dictionary<string, string>
             {
                 ["FileWatcher_ChangeType"] = "Created",
@@ -111,7 +111,7 @@ public class Tests
             var i = info[0];
 
             Assert.That(new List<string> { "test", fp, fn, "Changed" }, Is.EqualTo(i.Arguments));
-            Assert.That(Path.GetDirectoryName(AppContext.BaseDirectory), Is.EqualTo(i.WorkingDirectory));
+            Assert.That(AppContext.BaseDirectory, Is.EqualTo(i.WorkingDirectory));
             Assert.That(new Dictionary<string, string>
             {
                 ["FileWatcher_ChangeType"] = "Changed",
@@ -151,7 +151,7 @@ public class Tests
             var i = info[0];
 
             Assert.That(new List<string> { "test", fp, fn, "Deleted" }, Is.EqualTo(i.Arguments));
-            Assert.That(Path.GetDirectoryName(AppContext.BaseDirectory), Is.EqualTo(i.WorkingDirectory));
+            Assert.That(AppContext.BaseDirectory, Is.EqualTo(i.WorkingDirectory));
             Assert.That(new Dictionary<string, string>
             {
                 ["FileWatcher_ChangeType"] = "Deleted",
@@ -187,7 +187,7 @@ public class Tests
             Assert.That(info, Is.Not.Null);
             Assert.That(info, Has.Count.EqualTo(1));
             var i0 = info[0];
-            Assert.That(Path.GetDirectoryName(AppContext.BaseDirectory), Is.EqualTo(i0.WorkingDirectory));
+            Assert.That(AppContext.BaseDirectory, Is.EqualTo(i0.WorkingDirectory));
             Assert.That(new Dictionary<string, string>
             {
                 ["FileWatcher_ChangeType"] = "Renamed",
@@ -347,7 +347,7 @@ public class Tests
             Assert.That(info, Is.Not.Null);
             Assert.That(info, Has.Count.EqualTo(1));
             var i0 = info[0];
-            Assert.That(Path.GetDirectoryName(AppContext.BaseDirectory), Is.EqualTo(i0.WorkingDirectory));
+            Assert.That(AppContext.BaseDirectory, Is.EqualTo(i0.WorkingDirectory));
             Assert.That(new Dictionary<string, string>
             {
                 ["FileWatcher_ChangeType"] = "Created",
@@ -385,7 +385,7 @@ public class Tests
             Assert.That(info, Has.Count.EqualTo(2));
 
             var i0 = info[0];
-            Assert.That(Path.GetDirectoryName(AppContext.BaseDirectory), Is.EqualTo(i0.WorkingDirectory));
+            Assert.That(AppContext.BaseDirectory, Is.EqualTo(i0.WorkingDirectory));
             Assert.That(new Dictionary<string, string>
             {
                 ["FileWatcher_ChangeType"] = "Created",
@@ -394,7 +394,7 @@ public class Tests
             }, Is.EqualTo(i0.Environment));
 
             var i1 = info[1];
-            Assert.That(Path.GetDirectoryName(AppContext.BaseDirectory), Is.EqualTo(i1.WorkingDirectory));
+            Assert.That(AppContext.BaseDirectory, Is.EqualTo(i1.WorkingDirectory));
             Assert.That(new Dictionary<string, string>
             {
                 ["FileWatcher_ChangeType"] = "Created",
