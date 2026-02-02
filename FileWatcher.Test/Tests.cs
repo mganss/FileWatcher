@@ -31,7 +31,7 @@ public class Tests
         var watcher = new Watcher(task);
         var countdown = new CountdownEvent(numProcesses);
 
-        watcher.ProcessExited += (s, e) => countdown.Signal();
+        watcher.ProcessExited += (s, e) => { if (countdown.CurrentCount > 0) countdown.Signal(); };
 
         watcher.Start();
 
@@ -90,6 +90,7 @@ public class Tests
             Path = TestDirectory,
             Filter = "test.*",
             Throttle = 1,
+            ChangeTypes = WatcherChangeTypes.Changed,
             Merge = true,
             Arguments = "test {FullPath} {Name} {ChangeType}"
         };
