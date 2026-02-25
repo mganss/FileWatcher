@@ -24,7 +24,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Glob.cs" Version="5.1.1643" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 		<PackageReference Include="NLog.Schema" Version="6.1.0" />
 		<PackageReference Include="NUnit" Version="4.5.0" />
