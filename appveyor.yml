@@ -31,7 +31,11 @@ test_script:
   - ps: cp coverage.*.xml ./coverage.xml
   - ps: |
       if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER) {
-          dotnet sonarscanner end /d:sonar.token="$env:sonar_token"
+          $output = dotnet sonarscanner end /d:sonar.token="$env:sonar_token" 2>&1
+          $output | Where-Object { $_ -notmatch "Failed to delete temp folder" } | Write-Host
+          if ($LASTEXITCODE -ne 0 -and ($output | Select-String "Failed to delete temp folder")) {
+              $LASTEXITCODE = 0
+          }
       }
   - pip install codecov
   - codecov -f "coverage.xml"
