@@ -8,16 +8,21 @@ if (args.Length > 1 && args[0] == "delay")
 var info = new CommandInfo
 {
     WorkingDirectory = Environment.CurrentDirectory,
-    Arguments = args.ToList(),
+    Arguments = [.. args],
     Environment = Environment.GetEnvironmentVariables()
         .OfType<DictionaryEntry>()
         .Where(e => e.Key.ToString()?.StartsWith("FileWatcher") == true && e.Value != null)
         .ToDictionary(e => e.Key.ToString()!, e => e.Value!.ToString()!)
 };
 
-var json = JsonSerializer.Serialize(info, new JsonSerializerOptions { WriteIndented = true });
+var json = JsonSerializer.Serialize(info, _options);
 
 File.WriteAllText(Path.Combine(AppContext.BaseDirectory, $"test.{DateTime.UtcNow.Ticks}.json"), json);
 
 Console.Out.WriteLine("Out");
 Console.Error.WriteLine("Error");
+
+partial class Program
+{
+    static readonly JsonSerializerOptions _options = new() { WriteIndented = true };
+}

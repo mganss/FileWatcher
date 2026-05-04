@@ -8,7 +8,7 @@ namespace FileWatcher.Test;
 
 internal class CommandInfo
 {
-    public List<string> Arguments { get; set; } = new();
-    public Dictionary<string, string> Environment { get; set; } = new();
+    public List<string> Arguments { get; set; } = [];
+    public Dictionary<string, string> Environment { get; set; } = [];
     public string WorkingDirectory { get; set; } = string.Empty;
 }

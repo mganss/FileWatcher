@@ -17,12 +17,12 @@ namespace FileWatcher.Service
         {
             public string FileName { get; set; }
             public Config Config { get; set; }
-            public List<Watcher> Watchers { get; set; } = new();
+            public List<Watcher> Watchers { get; set; } = [];
             public FileSystemWatcher FileSystemWatcher { get; set; }
         }
 
         static readonly Logger Log = LogManager.GetLogger("FileWatcher.Service");
-        readonly Dictionary<string, WatcherInfo> watchers = new();
+        readonly Dictionary<string, WatcherInfo> watchers = [];
 
         private static Config LoadConfig(string configFile)
         {

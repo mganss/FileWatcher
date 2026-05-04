@@ -75,7 +75,7 @@ public class Watcher: IDisposable
         public DateTime Time { get; set; }
     }
 
-    readonly Dictionary<FileSystemWatcher, WatchInfo> Watchers = new();
+    readonly Dictionary<FileSystemWatcher, WatchInfo> Watchers = [];
     readonly bool Initialized = false;
 
     /// <summary>

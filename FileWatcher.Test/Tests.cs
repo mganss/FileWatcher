@@ -441,22 +441,22 @@ public class Tests
     [Test]
     public void TestArgs()
     {
-        Assert.Throws(typeof(ArgumentNullException), () => new Watcher(null));
-        Assert.Throws(typeof(ArgumentException), () => new Watcher(new WatchTask
+        Assert.Throws(typeof(ArgumentNullException), new Action(() => _ = new Watcher(null)));
+        Assert.Throws(typeof(ArgumentException), new Action(() => _ = new Watcher(new WatchTask
         {
             Name = null
-        }));
-        Assert.Throws(typeof(ArgumentException), () => new Watcher(new WatchTask
+        })));
+        Assert.Throws(typeof(ArgumentException), new Action(() => _ = new Watcher(new WatchTask
         {
             Name = "Test",
             Command = null
-        }));
-        Assert.Throws(typeof(ArgumentException), () => new Watcher(new WatchTask
+        })));
+        Assert.Throws(typeof(ArgumentException), new Action(() => _ = new Watcher(new WatchTask
         {
             Name = "Test",
             Command = "xyz",
             Path = null
-        }));
+        })));
     }
 
     [Test]

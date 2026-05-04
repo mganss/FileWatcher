@@ -29,7 +29,7 @@ namespace FileWatcher.Service
 
         /// <summary>Gets the tasks.</summary>
         /// <value>The tasks.</value>
-        public List<WatchTask> Tasks { get; private set; } = new();
+        public List<WatchTask> Tasks { get; private set; } = [];
 
         /// <summary>
         /// Determines whether the specified object is equal to the current object.
