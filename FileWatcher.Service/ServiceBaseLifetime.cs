@@ -27,16 +27,11 @@ namespace FileWatcher.Service
 
     // Code from https://github.com/aspnet/Hosting/blob/2a98db6a73512b8e36f55a1e6678461c34f4cc4d/samples/GenericHostSample/ServiceBaseLifetime.cs
     [SupportedOSPlatform("windows")]
-    class ServiceBaseLifetime : ServiceBase, IHostLifetime
+    class ServiceBaseLifetime(IHostApplicationLifetime applicationLifetime) : ServiceBase, IHostLifetime
     {
         private readonly TaskCompletionSource<object> _delayStart = new();
 
-        public ServiceBaseLifetime(IHostApplicationLifetime applicationLifetime)
-        {
-            ApplicationLifetime = applicationLifetime ?? throw new ArgumentNullException(nameof(applicationLifetime));
-        }
-
-        private IHostApplicationLifetime ApplicationLifetime { get; }
+        private IHostApplicationLifetime ApplicationLifetime { get; } = applicationLifetime ?? throw new ArgumentNullException(nameof(applicationLifetime));
 
         public Task WaitForStartAsync(CancellationToken cancellationToken)
         {

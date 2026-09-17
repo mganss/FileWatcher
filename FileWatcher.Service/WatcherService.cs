@@ -135,8 +135,7 @@ namespace FileWatcher.Service
         {
             foreach (var (configFile, info) in watchers)
             {
-                if (info.FileSystemWatcher != null)
-                    info.FileSystemWatcher.EnableRaisingEvents = false;
+                info.FileSystemWatcher?.EnableRaisingEvents = false;
 
                 foreach (var watcher in info.Watchers)
                     watcher.Stop();
